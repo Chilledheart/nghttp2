@@ -54,10 +54,12 @@ if(ENABLE_SHARED_LIB)
     "${CMAKE_CURRENT_SOURCE_DIR}/includes"
   )
 
+  if(NOT DISABLE_INSTALL)
   install(TARGETS nghttp2
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+  endif()
 endif()
 
 if(HAVE_CUNIT OR ENABLE_STATIC_LIB)
@@ -70,11 +72,15 @@ if(HAVE_CUNIT OR ENABLE_STATIC_LIB)
   )
   target_compile_definitions(nghttp2_static PUBLIC "-DNGHTTP2_STATICLIB")
   if(ENABLE_STATIC_LIB)
+    if(NOT DISABLE_INSTALL)
     install(TARGETS nghttp2_static
       DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+    endif()
   endif()
 endif()
 
 
+if(NOT DISABLE_INSTALL)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libnghttp2.pc"
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+endif()
