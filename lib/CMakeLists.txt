@@ -65,7 +65,9 @@ if(BUILD_SHARED_LIBS)
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   )
 
-  install(TARGETS ${SHARED_LIB} EXPORT ${EXPORT_SET})
+  if(NOT DISABLE_INSTALL)
+    install(TARGETS ${SHARED_LIB} EXPORT ${EXPORT_SET})
+  endif()
   list(APPEND nghttp2_exports ${SHARED_LIB})
 endif()
 
@@ -87,7 +89,9 @@ if(BUILD_STATIC_LIBS)
 
   target_compile_definitions(${STATIC_LIB} PUBLIC "-DNGHTTP2_STATICLIB")
 
-  install(TARGETS ${STATIC_LIB} EXPORT ${EXPORT_SET})
+  if(NOT DISABLE_INSTALL)
+    install(TARGETS ${STATIC_LIB} EXPORT ${EXPORT_SET})
+  endif()
   list(APPEND nghttp2_exports ${STATIC_LIB})
 endif()
 
@@ -99,9 +103,11 @@ endif()
 
 add_library(${PROJECT_NAME}::nghttp2 ALIAS ${LIB_SELECTED})
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libnghttp2.pc"
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+if(NOT DISABLE_INSTALL)
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libnghttp2.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 
-install(EXPORT ${EXPORT_SET}
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-  NAMESPACE ${PROJECT_NAME}::)
+  install(EXPORT ${EXPORT_SET}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+    NAMESPACE ${PROJECT_NAME}::)
+endif()
